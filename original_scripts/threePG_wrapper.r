@@ -91,8 +91,6 @@ threePG_wrapper<-function( ## Climate input drivers (matrix/DF?)
                           cod.pred = "3PG",
                           cod.clim = "Average"
                           ){
-
-source("/home/forestresearch/Documents/FORPREF-Wind/3PG_ForestGALES/01_Implementation_3PG.R")
     
     parms<-c(pFS2,pFS20,pfsPower,pfsConst,aS,nS,pRx,pRn,Tmin,Topt,Tmax,kF,SWconst0,SWpower0,m0,fN0,fNn,MaxAge,nAge,rAge,gammaFx,gammaF0,tgammaF,Rttover,MaxCond,LAIgcx,BLcond,wSx1000,thinPower,mF,mR,mS,SLA0,SLA1,tSLA,k,fullCanAge,MaxIntcptn,LAImaxIntcptn,alpha,Y,poolFractn,e20,rhoAir,lambda,VPDconv,fracBB0,fracBB1,tBB,rhoMin,rhoMax,tRho,Qa,Qb,gDM_mol,molPAR_MJ,CoeffCond,fCalpha700,fCg700,fCalphax,fCg0,MinCond,Wl.s,Wsbr.s,Wr.s,pWl.sprouts,pWsbr.sprouts)
         

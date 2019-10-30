@@ -19,7 +19,6 @@ function (weather, presc, t = 0, N = 1200, Wl = 0, Wr = 0, Wsbr = 0,
     Wl.s = 0.526, Wsbr.s = 0.2035, Wr.s = 0.22775, pWl.sprouts = 0.5, 
     pWsbr.sprouts = 0.9, cod.pred = "3PG", cod.clim = "Average") 
 {
-    source("/home/forestresearch/Documents/FORPREF-Wind/3PG_ForestGALES/01_Implementation_3PG.R")
     parms <- c(pFS2, pFS20, pfsPower, pfsConst, aS, nS, pRx, 
         pRn, Tmin, Topt, Tmax, kF, SWconst0, SWpower0, m0, fN0, 
         fNn, MaxAge, nAge, rAge, gammaFx, gammaF0, tgammaF, Rttover, 
