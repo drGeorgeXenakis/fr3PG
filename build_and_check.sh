@@ -8,3 +8,4 @@ R --vanilla CMD build threePG
 ## #./freddypro.sh install
 ## sed -i 's|#||g' ~/.Rprofile
 ## cp -r FREddyPro/ $github/FREddyPro/
+cp -r threePG/* ../threePG
