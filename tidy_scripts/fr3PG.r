@@ -1,4 +1,4 @@
-threePG_wrapper <-
+fr3PG <-
 function (weather, presc, t = 0, N = 1200, Wl = 0, Wr = 0, Wsbr = 0, 
     Wlitt = 0, rotation = 1, cycle = 1, rm.sprouts = F, nyears = 100, 
     latitude = 39, FR = 0.5, soilclass = 0, ASW = 100, MaxASW = 200, 

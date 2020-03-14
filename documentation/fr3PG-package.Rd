@@ -1,25 +1,25 @@
-\name{threePG-package}
-\alias{threePG-package}
-\alias{threePG}
+\name{fr3PG-package}
+\alias{fr3PG-package}
+\alias{fr3PG}
 \docType{package}
 \title{
-\packageTitle{threePG}
+\packageTitle{fr3PG}
 }
 \description{
-\packageDescription{threePG}
+\packageDescription{fr3PG}
 }
 \details{
 
 The DESCRIPTION file:
-\packageDESCRIPTION{threePG}
-\packageIndices{threePG}
+\packageDESCRIPTION{fr3PG}
+\packageIndices{fr3PG}
 ~~ An overview of how to use the package, including the most important ~~
 ~~ functions ~~
 }
 \author{
-\packageAuthor{threePG}
+\packageAuthor{fr3PG}
 
-Maintainer: \packageMaintainer{threePG}
+Maintainer: \packageMaintainer{fr3PG}
 }
 \references{
 ~~ Literature or other references for background information ~~

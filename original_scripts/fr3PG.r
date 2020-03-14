@@ -1,4 +1,4 @@
-threePG_wrapper<-function( ## Climate input drivers (matrix/DF?)
+fr3PG<-function( ## Climate input drivers (matrix/DF?)
                           weather,
                           presc,
                           ## Stand initalisation

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-rm -rf threePG
-rm -rf threePG.Rcheck
+rm -rf fr3PG
+rm -rf fr3PG.Rcheck
 rm *tar.gz
 
 R --vanilla --no-save < package_skeleton.r
-cp documentation/*.Rd threePG/man/
-cp documentation/DESCRIPTION threePG/
-cp documentation/NAMESPACE threePG/
-# mkdir -p threePG/data
-# cp data/fluxes.rda threePG/data/
-# cp data/spectra.rda threePG/data/
-# cp data/harwood.csv threePG/data/
+cp documentation/*.Rd fr3PG/man/
+cp documentation/DESCRIPTION fr3PG/
+cp documentation/NAMESPACE fr3PG/
+# mkdir -p fr3PG/data
+# cp data/fluxes.rda fr3PG/data/
+# cp data/spectra.rda fr3PG/data/
+# cp data/harwood.csv fr3PG/data/
 find . -iname \*delete\* -exec rm {} \;
