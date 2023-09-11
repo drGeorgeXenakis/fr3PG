@@ -19,4 +19,18 @@ case "$1" in
 esac
 
 exit 0
-        
+    
+
+###!/bin/bash
+##R --vanilla CMD build fr3PG
+##cp -r fr3PG/* ../fr3PG
+
+###!/bin/bash
+##rm -rf fr3PG
+##rm -rf fr3PG.Rcheck
+##rm *tar.gz
+##R --vanilla --no-save < package_skeleton.r
+##cp documentation/*.Rd fr3PG/man/
+##cp documentation/DESCRIPTION fr3PG/
+##cp documentation/NAMESPACE fr3PG/
+##find . -iname \*delete\* -exec rm {} \;
