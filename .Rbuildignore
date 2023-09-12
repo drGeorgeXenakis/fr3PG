@@ -7,3 +7,4 @@ setup3PG.sh
 tidy.r
 ^.*\.Rproj$
 ^\.Rproj\.user$
+run3PG.R
