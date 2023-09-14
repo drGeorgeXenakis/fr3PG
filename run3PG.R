@@ -1,5 +1,9 @@
 ## Set working directory
-setwd("~/Documents/GitHub/fr3PG")
+if(.Platform$OS.type == "unix") {
+  setwd("~/Documents/GitHub/fr3PG")
+} else {
+  setwd("C:/Users/georgios.xenakis/Documents/GitHub/fr3PG")
+}
 
 ## Read climate data
 clm.har <- read_csv(file="./data/clm_harwood.csv")
@@ -201,47 +205,47 @@ beech <- list(
 devtools::load_all(".")
 
 output<-do.call(fr3PG,beech)%>%
-    slice(-1)%>%
-    select(-Year,-Month)%>%
-    bind_cols(clm.har)%>%
-    mutate(Date=as.Date(paste0(Year,"-",Month,"-01"))) %>%
-    mutate(LAI=if_else(LAI==0,NA_real_,LAI))%>%
-    group_by(Date=as.Date(cut(Date,"1 year")))%>%
-    summarise(dg=mean(dg,na.rm=T),
-              Vu=mean(Vu,na.rm=T),
-              NPP=sum(NPP,na.rm=T),
-              LAI=mean(LAI,na.rm=T))
+  slice(-1)%>%
+  select(-Year,-Month)%>%
+  bind_cols(clm.har)%>%
+  mutate(Date=as.Date(paste0(Year,"-",Month,"-01"))) %>%
+  mutate(LAI=if_else(LAI==0,NA_real_,LAI))%>%
+  group_by(Date=as.Date(cut(Date,"1 year")))%>%
+  summarise(dg=mean(dg,na.rm=T),
+            Vu=mean(Vu,na.rm=T),
+            NPP=sum(NPP,na.rm=T),
+            LAI=mean(LAI,na.rm=T))
 
 
 pDg <- output%>%
-    ## filter(t.proj>=40&t.proj<=45)%>%
-    ggplot(data=.)+
-    geom_point(aes(Date,dg))+
-    geom_line(aes(Date,dg))+
-    labs(x="Year",y="Mean stand DBH[cm]")
+  ## filter(t.proj>=40&t.proj<=45)%>%
+  ggplot(data=.)+
+  geom_point(aes(Date,dg))+
+  geom_line(aes(Date,dg))+
+  labs(x="Year",y="Mean stand DBH[cm]")
 
 
 pVu <- output%>%
-    ## filter(Date>=40&Date<=45)%>%
-    ggplot(data=.)+
-    geom_point(aes(Date,Vu))+
-    geom_line(aes(Date,Vu))+
-    labs(x="Year",y="Stand Volume [m3/ha]")
+  ## filter(Date>=40&Date<=45)%>%
+  ggplot(data=.)+
+  geom_point(aes(Date,Vu))+
+  geom_line(aes(Date,Vu))+
+  labs(x="Year",y="Stand Volume [m3/ha]")
 
 
 pNPP <- output%>%
-    ## filter(Date>=40&Date<=45)%>%
-    ggplot(data=.)+
-    geom_point(aes(Date,NPP))+
-    geom_line(aes(Date,NPP))+
-    labs(x="Year",y="Annual NPP [tDM/ha]")
+  ## filter(Date>=40&Date<=45)%>%
+  ggplot(data=.)+
+  geom_point(aes(Date,NPP))+
+  geom_line(aes(Date,NPP))+
+  labs(x="Year",y="Annual NPP [tDM/ha]")
 
 
 pLAI <- output%>%
-    ## filter(Date>=40&Date<=45)%>%
-    ggplot(data=.)+
-    geom_point(aes(Date,LAI))+
-    geom_line(aes(Date,LAI))+
-    labs(x="Year",y="LAI [m2/m2]")
+  ## filter(Date>=40&Date<=45)%>%
+  ggplot(data=.)+
+  geom_point(aes(Date,LAI))+
+  geom_line(aes(Date,LAI))+
+  labs(x="Year",y="LAI [m2/m2]")
 
 egg::ggarrange(pDg,pVu,pNPP,pLAI)
