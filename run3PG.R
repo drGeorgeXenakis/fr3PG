@@ -105,6 +105,97 @@ default <- list(
 )
 
 
+sitka<-list(
+  weather=clm.har,
+  ## ~~ Initial pools ~~ ##
+  Wl = 0.01,
+  WlDormant = 0,
+  Wr = 0.01,
+  Wsbr = 0.1,
+  Wlitt = 0,# could be real small?
+  ## ~~ Site ~~ ##
+  N = 2000,
+  rotation = 1,
+  cycle = 1,
+  rm.sprouts = F,
+  nyears = 35,
+  latitude = 57.06,
+  soilclass = -1,
+  ASW = 165,
+  MaxASW = 500,
+  MinASW = 0,
+  CO2 = 400,
+  FR = 0.3,
+  ## ~~ Parameters ~~ ##
+  pFS2 = 0.979729182866315,
+  pFS20 = 0.450083704735021,
+  aS = 0.041517998716385,
+  nS = 2.64745625287154,
+  pRx = 0.637320766593578,
+  pRn = 0.285132846643722,
+  Tmin = -5,
+  Topt = 15,
+  Tmax = 35,
+  kF = 0,
+  SWconst0 = 0.3,
+  SWpower0 = 4,
+  m0 = 0.392548265174109,
+  MaxAge = 265.6,
+  nAge = 3.545,
+  rAge = 0.796,
+  gammaFx = 0.01888,
+  gammaF0 = 0.001,
+  tgammaF = 60,
+  Rttover = 0.1,
+  MaxCond = 0.02,
+  LAIgcx = 1.97882119903727,
+  BLcond = 0.102217047783467,
+  wSx1000 = 500,
+  thinPower = 1.5,
+  mF = 0.633672385962458,
+  mR = 0.650445331850193,
+  mS = 0.2,
+  SLA0 = 3.85479046435674,
+  SLA1 = 5.33472018885286,
+  tSLA = 3.94078881883446,
+  k = 0.5,
+  fullCanAge = 18,
+  MaxIntcptn = 0.1,
+  LAImaxIntcptn = 5,
+  alpha = 0.06,
+  Y = 0.633301670948344,
+  poolFractn = 0,
+  e20 = 2.2,
+  rhoAir = 1.2,
+  lambda = 2460000,
+  VPDconv = 0.000622,
+  fracBB0 = 0.3,
+  fracBB1 = 0.1,
+  tBB = 10,
+  rhoMin = 0.39,
+  rhoMax = 0.39,
+  tRho = 5,
+  Qa = -50,
+  Qb = 0.8,
+  gDM_mol = 24,
+  molPAR_MJ = 2.3,
+  CoeffCond = 0.09986604057721,
+  fCalpha700 = 1.433,
+  fCg700 = 0.451,
+  fCalphax = 2.33333333333333,
+  fCg0 = 1.75,
+  MinCond = 0.005,
+  leaf.grow = 0,
+  leaf.fall = 0,
+  Wl.s = 0.01,
+  Wsbr.s = 0.1,
+  Wr.s = 0.01,
+  pWl.sprouts = 0.5,
+  pWsbr.sprouts = 0.9,
+  cod.pred = "3PG",
+  cod.clim = "Month"
+)
+
 beech <- list(
   clm.har,
   ## presc,
@@ -249,3 +340,82 @@ pLAI <- output%>%
   labs(x="Year",y="LAI [m2/m2]")
 
 egg::ggarrange(pDg,pVu,pNPP,pLAI)
+
+
+
+
+
+
+
+output<-do.call(fr3PG,sitka)
+ggplot(output)+geom_line(aes(t.proj,difLitter))+geom_line(aes(t.proj,difRoots))
+
+ggplot(output)+geom_line(aes(t.proj,fT))+geom_line(aes(t.proj,fSW))
+
+output%>%select(TotalLitter)%>%tail
+
+
+monthlyLitter <- (mean(output$difLitter,na.rm=T)+mean(output$difRoots,na.rm=T))*0.5 ##tC/ha/yr
+monthlyFT <- mean(output$fT,na.rm=T)
+monthlyFSW <- mean(output$fSW,na.rm=T)
+
+
+
+
+
+
+
+startYear = 2023
+startMonth = 1
+nYears=1000
+step=12
+c_n=26
+c_nL=10
+k_xC=0.01
+k_xN=0.03
+Cinit = 100
+Ninit=Cinit/c_n
+
+SMoutput <- tibble(time=1,Year=startYear,month=startMonth,C=Cinit,N=Ninit,Rs=0)
+
+k=1
+for(i in 1:nYears){
+  Year <- startYear+(i-1)
+  for(j in (startMonth+1):step){
+    k<-k+1
+    month <- startMonth + (j-1)
+    time<-i+(j-1)/step
+    SMoutput[k,"time"] <- time
+    SMoutput[k,"Year"] <- Year
+    SMoutput[k,"month"] <- month
+    if(i==1&j==1) {
+      C=Cinit;N=Ninit;Rs=0
+    }else{
+      Rs = k_xC*SMoutput[k-1,"C"]*monthlyFT*monthlyFSW
+      Nout = k_xN*SMoutput[k-1,"N"]*monthlyFT*monthlyFSW
+      dC_dt = monthlyLitter - Rs
+      dN_dt = monthlyLitter/c_nL - Nout
+      SMoutput[k,"C"] <- SMoutput[k-1,"C"] + dC_dt
+      SMoutput[k,"N"] <- SMoutput[k-1,"N"] + dN_dt
+      SMoutput[k,"Rs"] <- Rs
+    }
+  }
+}
+
+
+SMoutput%>%
+  select(time,C,N)%>%
+  gather(key="pool",value="mass",2:3)%>%
+  ggplot(data=.)+
+  plotAesthetic+
+  geom_line(aes(time,mass))+
+  facet_wrap(.~pool,nrow=2,ncol=1,scales="free")
+
+
+
+
+
+
+
+
+
